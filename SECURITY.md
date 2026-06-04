@@ -43,5 +43,5 @@ We do enforce some hardening even within the local-only threat model:
 - The dev server binds to loopback (`127.0.0.1`), never `0.0.0.0`. Do NOT change `vite.config.ts` `server.host`.
 - All API write routes cap the request body and reject non-JSON or structurally invalid models.
 - File paths from URL params are filtered through a kebab-case regex + path-prefix check so `../../etc/passwd`-style traversal can't escape `data/`.
-- We don't ship the abandoned `xlsx` package. Writing XLSX is done via `exceljs`; reading XLSX is intentionally unsupported and a monorepo-level CI script (`scripts/check-no-xlsx.sh`) blocks it from being reintroduced.
+- We don't ship the abandoned `xlsx` package. Writing XLSX is done via `exceljs`; reading XLSX is intentionally unsupported (there is no safe parser of comparable scope).
 - Dependabot watches `package.json` and the GitHub Actions workflows weekly for vulnerable updates.
