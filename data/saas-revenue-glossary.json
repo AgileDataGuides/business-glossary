@@ -1,0 +1,298 @@
+{
+  "version": "1.0",
+  "id": "saas-revenue-glossary",
+  "name": "SaaS Revenue Glossary",
+  "description": "Business glossary for SaaS revenue metrics, subscription lifecycle and billing. Aligns with the SaaS Revenue Metrics IPC, the SaaS Revenue Business Event Matrix and the Stripe Customer/Subscription/Invoice data contracts.",
+  "categories": [
+    "Financial",
+    "Subscription Lifecycle",
+    "Customer",
+    "Metric",
+    "Billing"
+  ],
+  "stewards": [
+    "Chief Revenue Officer (CRO)",
+    "Chief Financial Officer (CFO)",
+    "Revenue Operations",
+    "Finance Analytics",
+    "Data Engineering",
+    "Customer Success"
+  ],
+  "statuses": [
+    "Draft",
+    "Approved",
+    "Deprecated"
+  ],
+  "terms": [
+    {
+      "id": "term-customer",
+      "name": "Customer",
+      "description": "An organisation or individual that has a paid subscription to one of our SaaS products. Identified end-to-end by a Stripe customer id (`raw.stripe.customers.id`).",
+      "synonyms": ["Account", "Subscriber"],
+      "category": "Customer",
+      "steward": "Customer Success",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-customer", "name": "Customer", "description": "Person or organisation paying for a subscription" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-active-customers", "name": "How many active paying customers do we have today?", "description": "" }
+      ],
+      "order": 1,
+      "definitionCategory": "party",
+      "definitionDifferentiator": "that has at least one active @{Subscription}"
+    },
+    {
+      "id": "term-subscription",
+      "name": "Subscription",
+      "description": "A recurring billing commitment between a Customer and one of our SaaS products. Backed by `raw.stripe.subscriptions`. A customer can have multiple subscriptions (e.g. one per product, plus add-ons).",
+      "synonyms": ["Plan", "Recurring Contract"],
+      "category": "Subscription Lifecycle",
+      "steward": "Revenue Operations",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-subscription", "name": "Subscription", "description": "Recurring billing relationship" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-active-subs", "name": "How many active subscriptions are billing this month?", "description": "" }
+      ],
+      "order": 2,
+      "definitionCategory": "recurring contract",
+      "definitionDifferentiator": "between a @{Customer} and a product, billed on a fixed cadence"
+    },
+    {
+      "id": "term-invoice",
+      "name": "Invoice",
+      "description": "A billing document issued against a Subscription. Tracks amount due, amount paid, currency, status, and recognition period. Backed by `raw.stripe.invoices`.",
+      "synonyms": ["Bill", "Statement"],
+      "category": "Billing",
+      "steward": "Finance Analytics",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-invoice", "name": "Invoice", "description": "Billing document for a subscription period" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-invoice-collected", "name": "What is the collected vs outstanding invoice amount this month?", "description": "" }
+      ],
+      "order": 3,
+      "definitionCategory": "billing document",
+      "definitionDifferentiator": "issued against a @{Subscription} for one billing period"
+    },
+    {
+      "id": "term-mrr",
+      "name": "Monthly Recurring Revenue (MRR)",
+      "description": "The normalised monthly value of all active subscriptions on a given date. Annual plans are divided by 12; multi-year plans by the contract length. Excludes one-off charges, taxes and refunds.",
+      "synonyms": ["MRR"],
+      "category": "Metric",
+      "steward": "Chief Revenue Officer (CRO)",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-mrr", "name": "MRR", "description": "Monthly Recurring Revenue snapshot" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-mrr-trend", "name": "What is the Monthly Recurring Revenue (MRR) trend over the last 12 months?", "description": "" }
+      ],
+      "order": 4,
+      "definitionCategory": "revenue metric",
+      "definitionDifferentiator": "summing the normalised monthly value of every active @{Subscription} on a given date"
+    },
+    {
+      "id": "term-arr",
+      "name": "Annual Recurring Revenue (ARR)",
+      "description": "MRR multiplied by 12. Forward-looking expectation of recurring revenue over the next year, assuming no churn or expansion.",
+      "synonyms": ["ARR"],
+      "category": "Metric",
+      "steward": "Chief Revenue Officer (CRO)",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-arr", "name": "ARR", "description": "Annual Recurring Revenue" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-arr", "name": "How much Annual Recurring Revenue (ARR) are we generating across all customer segments?", "description": "" }
+      ],
+      "order": 5,
+      "definitionCategory": "revenue metric",
+      "definitionDifferentiator": "equal to @{Monthly Recurring Revenue (MRR)} × 12"
+    },
+    {
+      "id": "term-arpu",
+      "name": "Average Revenue Per User (ARPU)",
+      "description": "MRR divided by the number of active paying customers in the period. Tracked per segment to expose where pricing power is weakest.",
+      "synonyms": ["ARPU", "ARPA (Average Revenue Per Account)"],
+      "category": "Metric",
+      "steward": "Finance Analytics",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-arpu", "name": "ARPU", "description": "Average Revenue Per User" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-arpu", "name": "What is the Average Revenue Per User (ARPU) for each customer segment?", "description": "" }
+      ],
+      "order": 6,
+      "definitionCategory": "revenue metric",
+      "definitionDifferentiator": "equal to @{Monthly Recurring Revenue (MRR)} ÷ active @{Customer} count"
+    },
+    {
+      "id": "term-churn",
+      "name": "Churn",
+      "description": "The loss of a Customer or the downgrade/cancellation of a Subscription within a period. Reported as Logo Churn (count of customers lost) and Revenue Churn (MRR lost). Default window: monthly.",
+      "synonyms": ["Customer Loss", "Cancellation"],
+      "category": "Subscription Lifecycle",
+      "steward": "Customer Success",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-churn", "name": "Churn", "description": "Customer or revenue lost in a period" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-churn-rate", "name": "What is our monthly churn rate by customer segment?", "description": "" }
+      ],
+      "order": 7,
+      "definitionCategory": "lifecycle event",
+      "definitionDifferentiator": "where a @{Customer} cancels or downgrades a @{Subscription} within a period"
+    },
+    {
+      "id": "term-expansion",
+      "name": "Expansion Revenue",
+      "description": "Incremental MRR from existing Customers — upgrades, seat additions, cross-sells of additional products. Counted in the period the expansion event occurs.",
+      "synonyms": ["Upsell Revenue", "Expansion MRR"],
+      "category": "Subscription Lifecycle",
+      "steward": "Revenue Operations",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-expansion", "name": "Expansion", "description": "Growth within an existing customer base" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-expansion", "name": "How much of our MRR growth this quarter came from expansion vs new logos?", "description": "" }
+      ],
+      "order": 8,
+      "definitionCategory": "revenue event",
+      "definitionDifferentiator": "where an existing @{Customer} increases their @{Subscription} value"
+    },
+    {
+      "id": "term-nrr",
+      "name": "Net Revenue Retention (NRR)",
+      "description": "Percentage of starting MRR retained from existing customers after expansion, contraction and churn. NRR > 100% means the existing customer base is growing on its own.",
+      "synonyms": ["NRR", "Net Dollar Retention", "NDR"],
+      "category": "Metric",
+      "steward": "Chief Revenue Officer (CRO)",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-nrr", "name": "NRR", "description": "Net Revenue Retention rate" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-nrr", "name": "What is our Net Revenue Retention (NRR) cohort over time?", "description": "" }
+      ],
+      "order": 9,
+      "definitionCategory": "retention metric",
+      "definitionDifferentiator": "equal to (starting MRR + @{Expansion Revenue} − contraction − @{Churn}) ÷ starting MRR"
+    },
+    {
+      "id": "term-trial",
+      "name": "Trial",
+      "description": "A time-limited free use of a product before billing begins. Tracked on Stripe Subscriptions via `trial_start` / `trial_end`. A trial that doesn't convert to a paid subscription is not counted in MRR.",
+      "synonyms": ["Free Trial", "Eval"],
+      "category": "Subscription Lifecycle",
+      "steward": "Revenue Operations",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-trial", "name": "Trial", "description": "Free pre-paid period of a subscription" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-trial-conversion", "name": "What percentage of trials convert to paid subscriptions?", "description": "" }
+      ],
+      "order": 10,
+      "definitionCategory": "pre-billing period",
+      "definitionDifferentiator": "on a @{Subscription} during which the @{Customer} is not yet billed"
+    },
+    {
+      "id": "term-conversion",
+      "name": "Conversion",
+      "description": "The lifecycle event where a Trial becomes a paid Subscription. Conversion Rate = converted / trial-started for a cohort. Drives top-of-funnel MRR growth.",
+      "synonyms": ["Trial Conversion"],
+      "category": "Subscription Lifecycle",
+      "steward": "Revenue Operations",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-conversion", "name": "Conversion", "description": "Trial → paid transition" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-conversion-rate", "name": "What is the trial-to-paid conversion rate by acquisition channel?", "description": "" }
+      ],
+      "order": 11,
+      "definitionCategory": "lifecycle event",
+      "definitionDifferentiator": "where a @{Trial} transitions to a billing @{Subscription}"
+    },
+    {
+      "id": "term-ltv",
+      "name": "Customer Lifetime Value (LTV)",
+      "description": "Predicted total revenue from a customer over the entire relationship. Simplest formula: ARPU ÷ churn rate. Drives the maximum tolerable Customer Acquisition Cost.",
+      "synonyms": ["LTV", "CLV"],
+      "category": "Metric",
+      "steward": "Finance Analytics",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-ltv", "name": "LTV", "description": "Customer Lifetime Value" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-ltv-cac", "name": "What is our LTV-to-CAC ratio by segment?", "description": "" }
+      ],
+      "order": 12,
+      "definitionCategory": "predictive metric",
+      "definitionDifferentiator": "estimating total revenue from a @{Customer} over the lifetime of the relationship"
+    },
+    {
+      "id": "term-cac",
+      "name": "Customer Acquisition Cost (CAC)",
+      "description": "Total sales + marketing spend in a period divided by the number of new paying customers acquired in the same period. Compared against LTV to gauge unit economics.",
+      "synonyms": ["CAC", "Acquisition Cost"],
+      "category": "Metric",
+      "steward": "Chief Financial Officer (CFO)",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-cac", "name": "CAC", "description": "Customer Acquisition Cost" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-cac", "name": "What did it cost to acquire a new customer this quarter?", "description": "" }
+      ],
+      "order": 13,
+      "definitionCategory": "cost metric",
+      "definitionDifferentiator": "equal to acquisition spend ÷ new @{Customer} count in a period"
+    },
+    {
+      "id": "term-recognised-revenue",
+      "name": "Recognised Revenue",
+      "description": "Revenue counted in the period the underlying service was delivered, regardless of when the customer was billed. ASC 606 / IFRS 15. Distinct from cash collected.",
+      "synonyms": ["Recognized Revenue", "GAAP Revenue"],
+      "category": "Financial",
+      "steward": "Chief Financial Officer (CFO)",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-recognised-revenue", "name": "Recognised Revenue", "description": "Revenue allocated to service period" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-recognised", "name": "What is our recognised revenue vs collected cash this quarter?", "description": "" }
+      ],
+      "order": 14,
+      "definitionCategory": "accounting concept",
+      "definitionDifferentiator": "allocating an @{Invoice} amount to the period the service was delivered"
+    },
+    {
+      "id": "term-deferred-revenue",
+      "name": "Deferred Revenue",
+      "description": "Cash collected from a Customer for service not yet delivered (e.g. annual upfront payment for monthly service). Sits on the balance sheet as a liability until recognised.",
+      "synonyms": ["Unearned Revenue"],
+      "category": "Financial",
+      "steward": "Chief Financial Officer (CFO)",
+      "status": "Approved",
+      "relatedConcepts": [
+        { "id": "rc-deferred-revenue", "name": "Deferred Revenue", "description": "Cash received but service not yet delivered" }
+      ],
+      "relatedQuestions": [
+        { "id": "rq-deferred", "name": "What is our deferred revenue balance at month-end?", "description": "" }
+      ],
+      "order": 15,
+      "definitionCategory": "balance sheet item",
+      "definitionDifferentiator": "for cash collected from a @{Customer} but not yet @{Recognised Revenue}"
+    }
+  ]
+}

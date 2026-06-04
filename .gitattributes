@@ -1,0 +1,27 @@
+# GitHub Linguist overrides
+#
+# This is a SvelteKit project. Files ending in `.svelte.ts` are Svelte 5
+# runes stores (using $state / $derived / $effect) — conceptually Svelte,
+# not generic TypeScript. Re-classify them so the language stats reflect
+# the project's nature.
+*.svelte.ts linguist-language=Svelte
+
+# Bundled from the workspace shared package by publish-app.sh — not
+# user-written code, doesn't reflect this app's character.
+app/src/lib/cp-shared.ts linguist-vendored=true
+app/src/lib/shared-data/** linguist-vendored=true
+app/src/lib/languages/** linguist-vendored=true
+
+# Format adapters (CP graph ↔ glossary, SKOS, OWL) — translation layer
+# parallel to languages/, same scaffolding character. Not the heart of
+# "what is a business glossary".
+app/src/lib/converters/** linguist-vendored=true
+
+# Adapter scaffolding — wraps the native store behind the shared
+# DataAdapter interface. Mechanical glue from the workspace pattern,
+# not the app's character.
+app/src/lib/adapters/** linguist-vendored=true
+
+# SvelteKit-generated artefacts.
+.svelte-kit/** linguist-generated=true
+app/.svelte-kit/** linguist-generated=true
