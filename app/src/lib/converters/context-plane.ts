@@ -1,8 +1,9 @@
 /**
  * Bidirectional converter between Glossary native JSON and Context Plane { nodes, links } format.
  */
-import type { ContextNode, ContextLink } from '$lib/cp-shared';
-import type { GlossaryModel, GlossaryTerm, GlossaryItem } from '$lib/types';
+import type { ContextNode, ContextLink } from '#lib/cp-shared.ts';
+import { getNodeLabels } from '#lib/cp-shared.ts';
+import type { GlossaryModel, GlossaryTerm, GlossaryItem } from '#lib/types.ts';
 
 function createId(prefix: string): string {
 	const rand = typeof crypto !== 'undefined' && crypto.randomUUID
@@ -263,8 +264,9 @@ export function contextPlaneToGlossary(
 		const linkedNodeIds = new Set(termLinks.map((l) => l.destination_id));
 		const linkedNodes = nodes.filter((n) => linkedNodeIds.has(n.id));
 
+		// Related Concepts are multi-label (`global_concept,global_glossary_term`)
 		function findByLabel(label: string): ContextNode[] {
-			return linkedNodes.filter((n) => n.label === label);
+			return linkedNodes.filter((n) => getNodeLabels(n).includes(label));
 		}
 
 		// Synonyms
@@ -315,14 +317,24 @@ export function contextPlaneToGlossary(
 		};
 	});
 
+	// Every listed lookup value in its saved order, then any value a term uses
+	// that the list lacks. Used values alone would drop the rest.
+	function orderedList(label: string, used: Set<string>): string[] {
+		const listed = nodes
+			.filter((n) => getNodeLabels(n).includes(label))
+			.sort((a, b) => ((a.properties?.order as number) ?? 0) - ((b.properties?.order as number) ?? 0))
+			.map((n) => n.name);
+		return [...new Set([...listed, ...used])];
+	}
+
 	return {
 		version: '1.0',
 		id: modelNode?.properties?.sourceId as string || modelName?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'imported',
 		name: modelName || modelNode?.name || 'Imported Glossary',
 		description: modelNode?.description || '',
 		terms,
-		categories: Array.from(categories),
-		stewards: Array.from(stewards),
-		statuses: Array.from(statuses)
+		categories: orderedList('gls_category', categories),
+		stewards: orderedList('gls_steward', stewards),
+		statuses: orderedList('gls_status', statuses)
 	};
 }

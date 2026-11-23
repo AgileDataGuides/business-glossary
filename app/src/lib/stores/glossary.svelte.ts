@@ -1,5 +1,5 @@
-import type { GlossaryModel, GlossaryTerm, GlossaryItem, GlossaryNode } from '$lib/types';
-import { buildXlsxBlob, downloadXlsx, type SheetSpec } from '$lib/cp-shared-xlsx';
+import type { GlossaryModel, GlossaryTerm, GlossaryItem, GlossaryNode } from '#lib/types.ts';
+import { buildXlsxBlob, downloadXlsx, type SheetSpec } from '#lib/cp-shared-xlsx/index.ts';
 
 function stripDateTimeSuffix(name: string): string {
 	return name.replace(/-\d{4}-\d{2}-\d{2}-\d{6}$/, '');
@@ -240,6 +240,11 @@ export async function newModel(name: string) {
 }
 
 export async function deleteModel(id: string) {
+	// Unsaved edits die with the model, before the request goes, so neither
+	// switchTo's save-on-dirty nor a Save while it is in flight writes the
+	// deleted model back. If the request fails, the edits are still dropped:
+	// the user chose to discard this model.
+	if (store.model.id === id) store.dirty = false;
 	await apiDeleteModel(id);
 	store.savedList = store.savedList.filter((s) => s.id !== id);
 	if (store.savedList.length > 0) {

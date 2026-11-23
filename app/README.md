@@ -30,7 +30,7 @@ Run `./start-business-glossary.sh` from the terminal.
 
 The app starts at [http://localhost:5117](http://localhost:5117).
 
-**Requires**: [Node.js](https://nodejs.org/) (v18+).
+**Requires**: [Node.js](https://nodejs.org/) 22.17+ or 24+ (not 23).
 
 ## Features
 

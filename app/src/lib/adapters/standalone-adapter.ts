@@ -1,6 +1,6 @@
-import type { DataAdapter, ContextNode, ContextLink } from '$lib/cp-shared';
-import type { GlossaryModel } from '$lib/types';
-import { glossaryToContextPlane, contextPlaneToGlossary } from '$lib/converters/context-plane';
+import type { DataAdapter, ContextNode, ContextLink } from '#lib/cp-shared.ts';
+import type { GlossaryModel } from '#lib/types.ts';
+import { glossaryToContextPlane, contextPlaneToGlossary } from '#lib/converters/context-plane.ts';
 
 /**
  * Create a DataAdapter that wraps the glossary store for standalone mode.

@@ -7,7 +7,7 @@
 		exportAsXlsx,
 		renameModel,
 		updateDescription
-	} from '$lib/stores/glossary.svelte';
+	} from '#lib/stores/glossary.svelte.ts';
 
 	let {
 		activeTab = $bindable('glossary'),

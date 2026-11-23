@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import type { ContextNode, ContextLink, DataAdapter } from '$lib/cp-shared';
-	import { getNodeLabels } from '$lib/cp-shared';
+	import type { ContextNode, ContextLink, DataAdapter } from '#lib/cp-shared.ts';
+	import { getNodeLabels } from '#lib/cp-shared.ts';
 	import CellDropdown, { type CellDropdownOption } from './CellDropdown.svelte';
 
 	let {
@@ -210,6 +210,7 @@
 			classification: 'classification',
 			sourceSystem: 'sourceSystem',
 			businessRule: 'businessRule',
+			trustRule: 'businessRule',
 			glossaryTerm: 'glossaryTerm'
 		};
 		const boolKeyMap: Record<string, keyof TableRow> = {

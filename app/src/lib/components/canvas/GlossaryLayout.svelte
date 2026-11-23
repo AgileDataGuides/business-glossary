@@ -1,10 +1,10 @@
 <script lang="ts">
-	import CanvasSection from '$lib/components/canvas/CanvasSection.svelte';
-	import GlossaryTableView from '$lib/components/canvas/GlossaryTableView.svelte';
-	import ConceptCardEditModal from '$lib/components/canvas/ConceptCardEditModal.svelte';
-	import type { ContextNode, ContextLink } from '$lib/cp-shared';
-	import type { DataAdapter } from '$lib/cp-shared';
-	import { getNodeLabels } from '$lib/cp-shared';
+	import CanvasSection from '#lib/components/canvas/CanvasSection.svelte';
+	import GlossaryTableView from '#lib/components/canvas/GlossaryTableView.svelte';
+	import ConceptCardEditModal from '#lib/components/canvas/ConceptCardEditModal.svelte';
+	import type { ContextNode, ContextLink } from '#lib/cp-shared.ts';
+	import type { DataAdapter } from '#lib/cp-shared.ts';
+	import { getNodeLabels } from '#lib/cp-shared.ts';
 	import { getContext } from 'svelte';
 
 	let {

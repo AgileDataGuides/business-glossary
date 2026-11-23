@@ -14,8 +14,8 @@
 // To roll out updated examples to existing visitors, bump SEED_VERSION
 // to today's date and re-publish.
 
-import { applyDemoSeeds } from '$lib/cp-shared-demo-seed';
-import type { GlossaryModel } from '$lib/types';
+import { applyDemoSeeds } from '#lib/cp-shared-demo-seed/index.ts';
+import type { GlossaryModel } from '#lib/types.ts';
 
 import saasRevenueSeed from '$data/saas-revenue-glossary.json';
 

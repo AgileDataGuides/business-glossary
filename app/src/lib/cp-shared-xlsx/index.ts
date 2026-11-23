@@ -19,7 +19,7 @@
  *
  * Usage:
  *   import { buildXlsxBlob, downloadXlsx, type SheetSpec }
- *     from '$lib/cp-shared-xlsx';
+ *     from '#lib/cp-shared-xlsx/index.ts';
  *
  *   const sheets: SheetSpec[] = [
  *     { title: 'Architecture', rows: [['Layer', 'Pattern'], ['Capture', 'CDC']] }
@@ -30,10 +30,35 @@
 import ExcelJS from 'exceljs';
 
 export interface SheetSpec {
-	/** Worksheet title — Excel caps at 31 chars; helper truncates if longer. */
+	/** Worksheet title — sanitised to Excel's rules (31-char cap, no * ? : \ / [ ]). */
 	title: string;
 	/** First row should be headers, remaining rows the data. */
 	rows: string[][];
+}
+
+/**
+ * Excel worksheet names may not contain * ? : \ / [ ], may not start or end
+ * with an apostrophe, may not be empty, and cap at 31 chars. Titles come from
+ * user data (model/contract names), so sanitise rather than throw.
+ */
+function safeSheetName(title: string, taken: Set<string>): string {
+	let name = title
+		.replace(/[*?:\\/[\]]/g, ' ')
+		.replace(/\s+/g, ' ')
+		.trim()
+		.replace(/^'+|'+$/g, '')
+		.slice(0, 31)
+		.trim();
+	if (!name) name = 'Sheet';
+	// Worksheet names are case-insensitively unique per workbook.
+	let candidate = name;
+	let i = 2;
+	while (taken.has(candidate.toLowerCase())) {
+		const suffix = ` (${i++})`;
+		candidate = name.slice(0, 31 - suffix.length) + suffix;
+	}
+	taken.add(candidate.toLowerCase());
+	return candidate;
 }
 
 /**
@@ -43,8 +68,9 @@ export interface SheetSpec {
  */
 export async function buildXlsxBlob(sheets: SheetSpec[]): Promise<Blob> {
 	const wb = new ExcelJS.Workbook();
+	const taken = new Set<string>();
 	for (const spec of sheets) {
-		const ws = wb.addWorksheet(spec.title.slice(0, 31));
+		const ws = wb.addWorksheet(safeSheetName(spec.title, taken));
 		ws.addRows(spec.rows);
 	}
 	const buffer = await wb.xlsx.writeBuffer();

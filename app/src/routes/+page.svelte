@@ -21,13 +21,13 @@
 		removeTerm,
 		switchTo,
 		importJSON
-	} from '$lib/stores/glossary.svelte';
-	import { applyGlossaryDemoSeeds } from '$lib/stores/demo-seed';
-	import { glossaryToContextPlane, contextPlaneToGlossary } from '$lib/converters/context-plane';
-	import { createStandaloneAdapter } from '$lib/adapters/standalone-adapter';
-	import Toolbar from '$lib/components/Toolbar.svelte';
-	import GlossaryLayout from '$lib/components/canvas/GlossaryLayout.svelte';
-	import GlossaryTableView from '$lib/components/canvas/GlossaryTableView.svelte';
+	} from '#lib/stores/glossary.svelte.ts';
+	import { applyGlossaryDemoSeeds } from '#lib/stores/demo-seed.ts';
+	import { glossaryToContextPlane, contextPlaneToGlossary } from '#lib/converters/context-plane.ts';
+	import { createStandaloneAdapter } from '#lib/adapters/standalone-adapter.ts';
+	import Toolbar from '#lib/components/Toolbar.svelte';
+	import GlossaryLayout from '#lib/components/canvas/GlossaryLayout.svelte';
+	import GlossaryTableView from '#lib/components/canvas/GlossaryTableView.svelte';
 
 	let activeTab = $state<string>('glossary');
 
@@ -88,6 +88,8 @@
 
 	async function handleDelete() {
 		if (!confirm(`Delete "${store.model.name}"?`)) return;
+		// A save still pending from an edit would write the deleted model back
+		clearTimeout(orderSaveTimer);
 		await deleteModel(store.model.id);
 	}
 
